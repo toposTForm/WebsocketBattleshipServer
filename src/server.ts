@@ -59,4 +59,4 @@ export class WSmain  {
 
 export const testWs = new WSmain(defaultPort);
 testWs.addWs();
-export const newGame = new Game();
+export const newGame = new Game();//game
