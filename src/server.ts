@@ -1,10 +1,6 @@
 import Websocket, { WebSocketServer } from 'ws';
-import url from 'node:url'
-import { Raw } from 'vue';
-import { UUID } from 'node:crypto';
-import { IncomingMessage } from 'node:http';
-import { ReqReg } from './reqTypes';
-import { ResReg, ResUpdateRoom, ResUpdateWinners, ResAddUserToRoom } from './resTypes';
+import { ReqAttack, ReqReg } from './reqTypes';
+import { ResReg, ResUpdateRoom, ResUpdateWinners, ResCreateGame, ResStartGame, ResTurn, ResFinish } from './resTypes';
 import { router } from './router'
 import { Game } from './game';
 
@@ -29,13 +25,18 @@ export class WSmain  {
                     messagetoJSON = JSON.parse(message.toString());
                     router(ws, messagetoJSON);
                 } catch (error) {
-                    console.error(`Clients request is not JSON data`);
+                    console.error(error);
                 }  
             });
             ws.on('close', () => {
                 let indexOfclient = WSmain.clientList.findIndex((client) => client.websocket == ws);
                 WSmain.clientList.splice(indexOfclient, 1);
             });
+            process.on('SIGINT', () => {
+            for (const client of WSmain.clientList)
+                client.websocket.close(1000, 'Server shutdown')
+                process.exit(0);
+            })
         });
         return wss;
     }
@@ -46,7 +47,7 @@ export class WSmain  {
         let port = this.port;
         let socket = wss;
     }
-    public wsSentMessageToClient(ws: Websocket, message: ResReg | ResUpdateRoom){
+    public wsSentMessageToClient(ws: Websocket, message: ResReg | ResUpdateRoom | ResCreateGame | ResStartGame | ResTurn | ReqAttack | ResUpdateWinners | ResFinish){
         ws.send(JSON.stringify(message));
     }
     static clientList: Array<{ websocket: Websocket, username: string, password: string, clientID: string }> = [];
