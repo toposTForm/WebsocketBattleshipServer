@@ -24,12 +24,17 @@ class WSmain {
                     (0, router_1.router)(ws, messagetoJSON);
                 }
                 catch (error) {
-                    console.error(`Clients request is not JSON data`);
+                    console.error(error);
                 }
             });
             ws.on('close', () => {
                 let indexOfclient = WSmain.clientList.findIndex((client) => client.websocket == ws);
                 WSmain.clientList.splice(indexOfclient, 1);
+            });
+            process.on('SIGINT', () => {
+                for (const client of WSmain.clientList)
+                    client.websocket.close(1000, 'Server shutdown');
+                process.exit(0);
             });
         });
         return wss;
