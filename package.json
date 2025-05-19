@@ -1,0 +1,33 @@
+{
+  "name": "websocket-battleship-server",
+  "version": "1.0.0",
+  "description": "rshool task 5",
+  "main": "app.js",
+  "scripts": {
+    "test": "start",
+    "start": "tsc && node ./build/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toposTForm/WebsocketBattleshipServer.git"
+  },
+  "keywords": [
+    "games"
+  ],
+  "author": "toposform",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/toposTForm/WebsocketBattleshipServer/issues"
+  },
+  "homepage": "https://github.com/toposTForm/WebsocketBattleshipServer#readme",
+  "dependencies": {
+    "@types/typescript": "^0.4.29"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.8.3",
+    "ws": "^8.18.2"
+  }
+}
